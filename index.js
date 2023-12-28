@@ -7,17 +7,21 @@ const {
   uploadImageToBlob,
   decrypt,
 } = require("./bin/utils");
+const cors = require("cors");
 const app = express();
 const port = 4000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-
-app.use(function (req, res, next) {
+app.use(cors());
+app.set("trust proxy", true);
+app.disable("etag");
+app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, OPTION, DELETE"
   );
   next();
 });
